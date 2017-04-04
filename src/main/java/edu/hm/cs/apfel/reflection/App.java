@@ -6,9 +6,9 @@ package edu.hm.cs.apfel.reflection;
  */
 public class App 
 {
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
-    }
+    @RenderMe(with = "blah")
+    private int test = 4;
 
+    @RenderMe
+    public String test2 = "asdf";
 }
