@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 public class RendererTestForException {
 
     @Test(expected=ClassNotFoundException.class)
-    public void testClassNotFoundException() throws IllegalAccessException, InstantiationException, ClassNotFoundException, InvocationTargetException {
+    public void testClassNotFoundException() throws Exception {
         Renderer r = new Renderer(new Object() {@RenderMe(with = "ArrayRenderer") private int[] privateIntArray = new int[]{1,2,3};});
         r.render();
     }

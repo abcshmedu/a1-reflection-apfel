@@ -20,6 +20,10 @@ public class App
     private int[]arrayFoo2() {
         return new int[] {30,30,30};
     }
+    @RenderMe()
+    private int[]exfoo(int value) {
+        return new int[] {10,20};
+    }
 
     @RenderMe(with = "edu.hm.cs.apfel.reflection.ArrayRenderer")
     private int[] narray = new int[]{1,2,3};

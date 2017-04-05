@@ -25,7 +25,6 @@ public class Renderer {
         this.obj = obj;
     }
 
-
     /**
      * For all fields, which are annotated with @RenderMe.
      * For all methods with return value and without parameter.
@@ -36,7 +35,8 @@ public class Renderer {
      * @throws InstantiationException InstantiationException
      * @throws InvocationTargetException InvocationTargetException
      */
-    public String render() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException {
+
+    public String render() throws Exception {
         String result = "";
         Class< ? > typeObject = obj.getClass();
 
@@ -71,7 +71,6 @@ public class Renderer {
 
                 if (method.getParameterTypes().length == 0) {
                     result += method.getName() + " ";
-                    // TODO: Unterscheide Return Array
 
                     if (method.getReturnType().isArray()) {
                         String renderPath = method.getAnnotation(RenderMe.class).with();
@@ -82,15 +81,15 @@ public class Renderer {
 
                             result += renderer.render(method.invoke(typeObject.newInstance()));
                         } else {
-
-                            result += "(Type " + method.getReturnType().getSimpleName() + ")" + method.invoke(typeObject.newInstance());
+                            throw new Exception("with is empty! @RenderMe annotated Functions with Arrays as a ReturnType have to have a valid Annotation argument (with)!");
+                            // Default Proceedure
+                            //result += "(Type "+method.getReturnType().getSimpleName() + ")"+ method.invoke(typeObject.newInstance());
                         }
                     } else {
                         result += "(Type " + method.getReturnType().getSimpleName() + ")" + method.invoke(typeObject.newInstance());
                     }
                 } else {
-                    // TODO: Werfe Exeption hier!
-                    throw new Error();
+                    throw new Exception("with @RenderMe Annotations, Functions are not allowed to have Arguments - and can't be rendered!");
                 }
                 result += "\n";
             }
@@ -99,3 +98,13 @@ public class Renderer {
         return result;
     }
 }
+
+/*
+    Example:
+
+    "Instance of edu.hm.SomeClass:\n" +
+    "foo (Type int): 5\n
+    array (Type int[]) [1, 2, 3, ]\n
+    date (Type java.util.Date): Fri Jan 02 11:17:36 CET 1970\n"
+
+ */

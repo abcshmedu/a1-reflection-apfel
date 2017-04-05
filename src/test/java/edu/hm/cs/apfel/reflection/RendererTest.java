@@ -42,7 +42,7 @@ public class RendererTest {
         }
 
         @org.junit.Test
-        public void test() throws IllegalAccessException, InstantiationException, ClassNotFoundException, InvocationTargetException {
+        public void test() throws Exception {
             assertEquals(expected, input.render());
         }
 }
