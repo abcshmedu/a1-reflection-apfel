@@ -25,8 +25,6 @@ public class ArrayRenderer implements Renderface {
 
         String result = "(Type " +  o.getClass().getSimpleName() + ") [";
 
-        System.out.println(o.getClass().getSimpleName());
-
         for (int i = 0; i < Array.getLength(o); i++) {
             Object value = Array.get(o, i);
             result += value + ", ";

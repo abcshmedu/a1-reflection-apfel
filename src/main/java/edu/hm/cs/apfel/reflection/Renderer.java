@@ -86,7 +86,7 @@ public class Renderer {
                     }
                 } else {
                     // TODO: Werfe Exeption hier!
-
+                    throw new Error();
                 }
                 result += "\n";
             }
