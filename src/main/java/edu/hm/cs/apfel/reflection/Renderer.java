@@ -25,12 +25,6 @@ public class Renderer {
         this.obj = obj;
     }
 
-    /**
-     * for all fields, which are annotated with @RenderMe.
-     * name (Typ) Wert\n
-     *
-     * @return
-     */
 
     /**
      * For all fields, which are annotated with @RenderMe.
@@ -38,11 +32,11 @@ public class Renderer {
      *
      * @return String contains all fields and methods (public and private) with their values.
      * @throws ClassNotFoundException renderer class of user in with-attribute does not exit
-     * @throws IllegalAccessException
-     * @throws InstantiationException
-     * @throws InvocationTargetException
+     * @throws IllegalAccessException IllegalAccessException
+     * @throws InstantiationException InstantiationException
+     * @throws InvocationTargetException InvocationTargetException
      */
-    public String render() throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException {
+    public String render() throws ClassNotFoundException, InvocationTargetException, IllegalAccessException, InstantiationException {
         String result = "";
         Class< ? > typeObject = obj.getClass();
 
@@ -58,8 +52,8 @@ public class Renderer {
 
                 result += field.getName();
 
-                if(!renderPath.equals("")){
-                    Class<?>typ = Class.forName(renderPath);
+                if (!renderPath.equals("")) {
+                    Class< ? > typ = Class.forName(renderPath);
                     Renderface renderer = (Renderface) typ.newInstance();
 
                     result += renderer.render(field.get(obj));
@@ -71,28 +65,28 @@ public class Renderer {
                 result += "\n";
             }
         }
-        for(Method method: typeObject.getDeclaredMethods()) {
-            if(method.getAnnotation(RenderMe.class) != null) {
+        for (Method method: typeObject.getDeclaredMethods()) {
+            if (method.getAnnotation(RenderMe.class) != null) {
                 method.setAccessible(true);
 
-                if(method.getParameterTypes().length==0) {
+                if (method.getParameterTypes().length == 0) {
                     result += method.getName() + " ";
                     // TODO: Unterscheide Return Array
 
-                    if(method.getReturnType().isArray()) {
+                    if (method.getReturnType().isArray()) {
                         String renderPath = method.getAnnotation(RenderMe.class).with();
 
-                        if(!renderPath.equals("")) {
-                            Class<?>typ = Class.forName(renderPath);
+                        if (!renderPath.equals("")) {
+                            Class< ? > typ = Class.forName(renderPath);
                             Renderface renderer = (Renderface) typ.newInstance();
 
                             result += renderer.render(method.invoke(typeObject.newInstance()));
                         } else {
 
-                            result += "(Type "+method.getReturnType().getSimpleName() + ")"+ method.invoke(typeObject.newInstance());
+                            result += "(Type " + method.getReturnType().getSimpleName() + ")" + method.invoke(typeObject.newInstance());
                         }
                     } else {
-                        result += "(Type "+method.getReturnType().getSimpleName() + ")" + method.invoke(typeObject.newInstance());
+                        result += "(Type " + method.getReturnType().getSimpleName() + ")" + method.invoke(typeObject.newInstance());
                     }
                 } else {
                     // TODO: Werfe Exeption hier!
@@ -104,20 +98,4 @@ public class Renderer {
 
         return result;
     }
-
-    public static void main(String[] args) throws IllegalAccessException, InstantiationException, ClassNotFoundException, InvocationTargetException {
-        App a = new App();
-        Renderer r = new Renderer(a);
-        System.out.print(r.render());
-    }
 }
-
-/*
-    Example:
-
-    "Instance of edu.hm.SomeClass:\n" +
-    "foo (Type int): 5\n
-    array (Type int[]) [1, 2, 3, ]\n
-    date (Type java.util.Date): Fri Jan 02 11:17:36 CET 1970\n"
-
- */
