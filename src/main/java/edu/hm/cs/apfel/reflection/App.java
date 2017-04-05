@@ -11,6 +11,10 @@ public class App
     private int foo() {
         return -10;
     }
+    @RenderMe(with = "edu.hm.cs.apfel.reflection.ArrayRenderer")
+    private int[]arrayFoo() {
+        return new int[] {10,15,20};
+    }
 
     @RenderMe(with = "edu.hm.cs.apfel.reflection.ArrayRenderer")
     private int[] narray = new int[]{1,2,3};

@@ -42,7 +42,10 @@ public class Renderer {
 
             if (field.getAnnotation(RenderMe.class) != null) {
                 field.setAccessible(true);
+
+
                 String renderPath = field.getAnnotation(RenderMe.class).with();
+
                 result += field.getName();
 
                 if(!renderPath.equals("")){
@@ -63,9 +66,28 @@ public class Renderer {
                 method.setAccessible(true);
 
                 if(method.getParameterTypes().length==0) {
-                    result += method.getName() + "(Type "+ method.getReturnType() + ") " + method.invoke(typeObject.newInstance());
+                    result += method.getName() + "(Type "+ method.getReturnType().getSimpleName() + ") ";
+                    // TODO: Unterscheide Return Array
+
+                    if(method.getReturnType().isArray()) {
+                        String renderPath = method.getAnnotation(RenderMe.class).with();
+
+                        if(!renderPath.equals("")) {
+
+                            Class<?>typ = Class.forName(renderPath);
+                            Renderface renderer = (Renderface) typ.newInstance();
+
+                            result += renderer.render(method.invoke(typeObject.newInstance()));
+                        } else {
+
+                            result += method.invoke(typeObject.newInstance());
+                        }
+                    } else {
+                        result += method.invoke(typeObject.newInstance());
+                    }
                 } else {
                     // TODO: Werfe Exeption hier!
+
                 }
                 result += "\n";
             }
