@@ -29,12 +29,22 @@ public class Renderer {
      * for all fields, which are annotated with @RenderMe.
      * name (Typ) Wert\n
      *
-     * @return String contains all fields (public and private) with their values.
+     * @return
      */
 
+    /**
+     * For all fields, which are annotated with @RenderMe.
+     * For all methods with return value and without parameter.
+     *
+     * @return String contains all fields and methods (public and private) with their values.
+     * @throws ClassNotFoundException renderer class of user in with-attribute does not exit
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws InvocationTargetException
+     */
     public String render() throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException {
         String result = "";
-        Class<?> typeObject = obj.getClass();
+        Class< ? > typeObject = obj.getClass();
 
         result += "Instance of " + typeObject.getCanonicalName() + ":\n";
 
