@@ -59,7 +59,6 @@ public class Renderer {
                 result += "\n";
             }
         }
-
         return result;
     }
 

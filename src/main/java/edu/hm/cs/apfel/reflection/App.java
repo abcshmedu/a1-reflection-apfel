@@ -24,8 +24,8 @@ public class App
     @RenderMe
     private final String[] publicFinalStringArray = {"firstElem", "SecondElem", "ThirdElem"};
 
-
     private class Blah {
+        @RenderMe
         private int blahField = 3;
 
         @Override

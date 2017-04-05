@@ -16,19 +16,12 @@ import java.lang.reflect.Field;
  */
 public class ArrayRenderer implements Renderface {
 
-
-
-
     /**
      * for all arrays, which are annotated with @RenderMe.
      * name (Typ) Wert\n
-     *
-     * @throws IllegalAccessException accesses field values
      * @return String contains all fields (public and private) with their values.
      */
 
-
-    @Override
     public String render(Object o) {
 
         String result ="(Type "+  o.getClass().getSimpleName() + ") [";
