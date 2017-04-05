@@ -66,14 +66,13 @@ public class Renderer {
                 method.setAccessible(true);
 
                 if(method.getParameterTypes().length==0) {
-                    result += method.getName();
+                    result += method.getName() + " ";
                     // TODO: Unterscheide Return Array
 
                     if(method.getReturnType().isArray()) {
                         String renderPath = method.getAnnotation(RenderMe.class).with();
 
                         if(!renderPath.equals("")) {
-
                             Class<?>typ = Class.forName(renderPath);
                             Renderface renderer = (Renderface) typ.newInstance();
 
