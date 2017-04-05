@@ -9,7 +9,7 @@ public class App
 
     @RenderMe
     private int foo() {
-        return (int)Math.random();
+        return -10;
     }
 
     @RenderMe(with = "edu.hm.cs.apfel.reflection.ArrayRenderer")

@@ -6,10 +6,7 @@
 
 package edu.hm.cs.apfel.reflection;
 
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 
 /**
  * @author Maximilian Lipp, lipp@hm.edu
@@ -35,7 +32,7 @@ public class Renderer {
      * @return String contains all fields (public and private) with their values.
      */
 
-    public String render() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public String render() throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException {
         String result = "";
         Class<?> typeObject = obj.getClass();
 
@@ -63,12 +60,12 @@ public class Renderer {
         }
         for(Method method: typeObject.getDeclaredMethods()) {
             if(method.getAnnotation(RenderMe.class) != null) {
+                method.setAccessible(true);
+
                 if(method.getParameterTypes().length==0) {
-                    result += method.getName() + "(Type "+ method.getReturnType() + ")" ;
-
+                    result += method.getName() + "(Type "+ method.getReturnType() + ") " + method.invoke(typeObject.newInstance());
                 } else {
-
-
+                    // TODO: Werfe Exeption hier!
                 }
                 result += "\n";
             }
@@ -77,7 +74,7 @@ public class Renderer {
         return result;
     }
 
-    public static void main(String[] args) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+    public static void main(String[] args) throws IllegalAccessException, InstantiationException, ClassNotFoundException, InvocationTargetException {
         App a = new App();
         Renderer r = new Renderer(a);
         System.out.print(r.render());
