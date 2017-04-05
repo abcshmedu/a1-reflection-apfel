@@ -6,6 +6,7 @@
 
 package edu.hm.cs.apfel.reflection;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
 /**
@@ -41,7 +42,13 @@ public class Renderer {
             if (field.getAnnotation(RenderMe.class) != null) {
                 field.setAccessible(true);
                 if(field.getType().isArray()){
-                    result +=
+                    result += field.getName() + "(Type " + field.getType() + "): [";
+                    System.out.println(field.get(obj));
+                    for(int i = 0; i < Array.getLength(field.get(obj)); i++) {
+                        result += Array.get(field.get(obj),i) + ", ";
+                    }
+                    result += "]\n";
+
                 } else {
                     result += field.getName() + "(Type " + field.getType() + "): "  + field.get(obj)  +"\n";
                 }
