@@ -6,8 +6,10 @@
 
 package edu.hm.cs.apfel.reflection;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * @author Maximilian Lipp, lipp@hm.edu
@@ -59,6 +61,19 @@ public class Renderer {
                 result += "\n";
             }
         }
+        for(Method method: typeObject.getDeclaredMethods()) {
+            if(method.getAnnotation(RenderMe.class) != null) {
+                if(method.getParameterTypes().length==0) {
+                    result += method.getName() + "(Type "+ method.getReturnType() + ")" ;
+
+                } else {
+
+
+                }
+                result += "\n";
+            }
+        }
+
         return result;
     }
 
@@ -67,7 +82,6 @@ public class Renderer {
         Renderer r = new Renderer(a);
         System.out.print(r.render());
     }
-
 }
 
 /*
