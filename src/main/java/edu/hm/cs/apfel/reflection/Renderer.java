@@ -31,7 +31,7 @@ public class Renderer {
      *
      * @return String contains all fields (public and private) with their values.
      */
-    public String render() {
+    public String render() throws IllegalAccessException {
         String result = "";
         Class< ? > typeObject = obj.getClass();
 
@@ -39,17 +39,16 @@ public class Renderer {
 
         for (Field field: typeObject.getDeclaredFields()) {
             if (field.getAnnotation(RenderMe.class) != null) {
-                result += field.getName() + "(Type " + field.getType() + "): " + "\n";
+                field.setAccessible(true);
+                result += field.getName() + "(Type " + field.getType() + "): "  + field.get(obj)  +"\n";
+
             }
         }
-
-
-
 
         return result;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IllegalAccessException {
         App a = new App();
         Renderer r = new Renderer(a);
         System.out.println(r.render());

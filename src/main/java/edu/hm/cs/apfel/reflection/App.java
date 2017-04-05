@@ -15,12 +15,14 @@ public class App
         Constructor<?> ctor = type.getConstructor(char[].class);
         Object s = ctor.newInstance(new char[] {'a'});
         System.out.println((String)s);
-        System.out.println(x);
-
+        System.out.println();
 
     }
     @RenderMe(with = "blah")
     private int test = 4;
+
+    @RenderMe
+    int[] i = {1,2,3};
 
     @RenderMe
     public String test2 = "asdf";
