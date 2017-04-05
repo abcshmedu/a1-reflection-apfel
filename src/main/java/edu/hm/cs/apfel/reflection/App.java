@@ -16,8 +16,14 @@ public class App
         return new int[] {10,15,20};
     }
 
+    @RenderMe()
+    private int[]arrayFoo2() {
+        return new int[] {30,30,30};
+    }
+
     @RenderMe(with = "edu.hm.cs.apfel.reflection.ArrayRenderer")
     private int[] narray = new int[]{1,2,3};
+
 
     @RenderMe
     private boolean priveateBooleanField = false;
