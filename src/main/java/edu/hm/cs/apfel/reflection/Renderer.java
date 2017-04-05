@@ -6,8 +6,7 @@
 
 package edu.hm.cs.apfel.reflection;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 
 /**
  * @author Maximilian Lipp, lipp@hm.edu
@@ -33,7 +32,7 @@ public class Renderer {
      * @return String contains all fields (public and private) with their values.
      */
 
-    public String render() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    public String render() throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException {
         String result = "";
         Class<?> typeObject = obj.getClass();
 
@@ -43,7 +42,10 @@ public class Renderer {
 
             if (field.getAnnotation(RenderMe.class) != null) {
                 field.setAccessible(true);
+
+
                 String renderPath = field.getAnnotation(RenderMe.class).with();
+
                 result += field.getName();
 
                 if(!renderPath.equals("")){
@@ -59,15 +61,46 @@ public class Renderer {
                 result += "\n";
             }
         }
+        for(Method method: typeObject.getDeclaredMethods()) {
+            if(method.getAnnotation(RenderMe.class) != null) {
+                method.setAccessible(true);
+
+                if(method.getParameterTypes().length==0) {
+                    result += method.getName() + "(Type "+ method.getReturnType().getSimpleName() + ") ";
+                    // TODO: Unterscheide Return Array
+
+                    if(method.getReturnType().isArray()) {
+                        String renderPath = method.getAnnotation(RenderMe.class).with();
+
+                        if(!renderPath.equals("")) {
+
+                            Class<?>typ = Class.forName(renderPath);
+                            Renderface renderer = (Renderface) typ.newInstance();
+
+                            result += renderer.render(method.invoke(typeObject.newInstance()));
+                        } else {
+
+                            result += method.invoke(typeObject.newInstance());
+                        }
+                    } else {
+                        result += method.invoke(typeObject.newInstance());
+                    }
+                } else {
+                    // TODO: Werfe Exeption hier!
+
+                }
+                result += "\n";
+            }
+        }
+
         return result;
     }
 
-    public static void main(String[] args) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+    public static void main(String[] args) throws IllegalAccessException, InstantiationException, ClassNotFoundException, InvocationTargetException {
         App a = new App();
         Renderer r = new Renderer(a);
         System.out.print(r.render());
     }
-
 }
 
 /*

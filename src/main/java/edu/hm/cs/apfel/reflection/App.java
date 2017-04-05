@@ -1,13 +1,20 @@
 package edu.hm.cs.apfel.reflection;
 
 /**
- * Hello world!
+ * Application
  *
  */
-public class App
+public class App 
 {
+
     @RenderMe
-    private App x = new App();
+    private int foo() {
+        return -10;
+    }
+    @RenderMe(with = "edu.hm.cs.apfel.reflection.ArrayRenderer")
+    private int[]arrayFoo() {
+        return new int[] {10,15,20};
+    }
 
     @RenderMe(with = "edu.hm.cs.apfel.reflection.ArrayRenderer")
     private int[] narray = new int[]{1,2,3};
@@ -28,7 +35,7 @@ public class App
     private final String[] publicFinalStringArray = {"firstElem", "SecondElem", "ThirdElem"};
 
     private class Blah {
-        @RenderMe
+
         private int blahField = 3;
 
         @Override
@@ -39,7 +46,5 @@ public class App
         }
     }
 
-    interface Sut{ };
 
-    private Sut obj = new Sut() { private int blahField = 3; };
 }
