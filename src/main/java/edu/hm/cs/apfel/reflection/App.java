@@ -6,9 +6,37 @@ package edu.hm.cs.apfel.reflection;
  */
 public class App 
 {
-    @RenderMe(with = "blah")
-    private int test = 4;
+    @RenderMe(with = "edu.hm.cs.apfel.reflection.App.ArrayRenderer")
+    private int privateIntField = 2;
 
     @RenderMe
-    public String test2 = "asdf";
+    private boolean priveateBooleanField = false;
+
+    @RenderMe
+    private Integer privateIntegerField = 3;
+
+    @RenderMe
+    private Blah app = new Blah();
+
+    @RenderMe
+    public String publicStringField = "asdf";
+
+    @RenderMe
+    private final String[] publicFinalStringArray = {"firstElem", "SecondElem", "ThirdElem"};
+
+
+    private class Blah {
+        private int blahField = 3;
+
+        @Override
+        public String toString() {
+            return "Blah{" +
+                    "blahField=" + blahField +
+                    '}';
+        }
+    }
+
+    interface Sut{ };
+
+    private Sut obj = new Sut() { private int blahField = 3; };
 }
