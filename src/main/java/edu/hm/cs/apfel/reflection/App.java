@@ -22,7 +22,7 @@ public class App
     private int test = 4;
 
     @RenderMe
-    int[] narray = new int[]{1,2,3};
+    private int[] narray = new int[]{1,2,3};
 
     @RenderMe
     public String test2 = "asdf";

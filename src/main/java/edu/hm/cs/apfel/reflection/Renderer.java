@@ -41,16 +41,16 @@ public class Renderer {
         for (Field field: typeObject.getDeclaredFields()) {
             if (field.getAnnotation(RenderMe.class) != null) {
                 field.setAccessible(true);
+
                 if(field.getType().isArray()){
-                    result += field.getName() + "(Type " + field.getType() + "): [";
-                    System.out.println(field.get(obj));
+                    result += field.getName() + "(Type " + field.getType().getSimpleName() + "): [";
                     for(int i = 0; i < Array.getLength(field.get(obj)); i++) {
                         result += Array.get(field.get(obj),i) + ", ";
                     }
                     result += "]\n";
 
                 } else {
-                    result += field.getName() + "(Type " + field.getType() + "): "  + field.get(obj)  +"\n";
+                    result += field.getName() + "(Type " + field.getType().getSimpleName() + "): "  + field.get(obj)  +"\n";
                 }
 
             }
@@ -62,7 +62,7 @@ public class Renderer {
     public static void main(String[] args) throws IllegalAccessException {
         App a = new App();
         Renderer r = new Renderer(a);
-        System.out.println(r.render());
+        System.out.print(r.render());
     }
 
 }
