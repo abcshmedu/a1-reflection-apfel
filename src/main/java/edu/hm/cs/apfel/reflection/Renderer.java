@@ -33,14 +33,18 @@ public class Renderer {
      */
     public String render() throws IllegalAccessException {
         String result = "";
-        Class< ? > typeObject = obj.getClass();
+        Class<?> typeObject = obj.getClass();
 
         result += "Instance of " + typeObject.getCanonicalName() + ":\n";
 
         for (Field field: typeObject.getDeclaredFields()) {
             if (field.getAnnotation(RenderMe.class) != null) {
                 field.setAccessible(true);
-                result += field.getName() + "(Type " + field.getType() + "): "  + field.get(obj)  +"\n";
+                if(field.getType().isArray()){
+                    result +=
+                } else {
+                    result += field.getName() + "(Type " + field.getType() + "): "  + field.get(obj)  +"\n";
+                }
 
             }
         }
