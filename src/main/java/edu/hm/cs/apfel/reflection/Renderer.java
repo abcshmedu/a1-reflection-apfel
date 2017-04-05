@@ -32,7 +32,7 @@ public class Renderer {
      * @return String contains all fields (public and private) with their values.
      */
 
-    public String render() throws ClassNotFoundException, IllegalAccessException, InstantiationException, InvocationTargetException {
+    public String render() throws Exception {
         String result = "";
         Class<?> typeObject = obj.getClass();
 
@@ -78,15 +78,15 @@ public class Renderer {
 
                             result += renderer.render(method.invoke(typeObject.newInstance()));
                         } else {
-
-                            result += "(Type "+method.getReturnType().getSimpleName() + ")"+ method.invoke(typeObject.newInstance());
+                            throw new Exception("with is empty! @RenderMe annotated Functions with Arrays as a ReturnType have to have a valid Annotation argument (with)!");
+                            // Default Proceedure
+                            //result += "(Type "+method.getReturnType().getSimpleName() + ")"+ method.invoke(typeObject.newInstance());
                         }
                     } else {
                         result += "(Type "+method.getReturnType().getSimpleName() + ")" + method.invoke(typeObject.newInstance());
                     }
                 } else {
-                    // TODO: Werfe Exeption hier!
-                    throw new Error();
+                    throw new Exception("with @RenderMe Annotations, Functions are not allowed to have Arguments - and can't be rendered!");
                 }
                 result += "\n";
             }
@@ -95,7 +95,7 @@ public class Renderer {
         return result;
     }
 
-    public static void main(String[] args) throws IllegalAccessException, InstantiationException, ClassNotFoundException, InvocationTargetException {
+    public static void main(String[] args) throws Exception {
         App a = new App();
         Renderer r = new Renderer(a);
         System.out.print(r.render());
