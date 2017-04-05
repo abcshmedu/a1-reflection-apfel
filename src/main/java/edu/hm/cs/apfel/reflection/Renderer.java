@@ -6,7 +6,7 @@
 
 package edu.hm.cs.apfel.reflection;
 
-import java.lang.reflect.Constructor;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
 /**
@@ -30,59 +30,39 @@ public class Renderer {
      * for all fields, which are annotated with @RenderMe.
      * name (Typ) Wert\n
      *
-     * @throws IllegalAccessException accesses field values
      * @return String contains all fields (public and private) with their values.
      */
     public String render() throws IllegalAccessException {
         String result = "";
-        Class< ? > typeObject = obj.getClass();
+        Class<?> typeObject = obj.getClass();
 
         result += "Instance of " + typeObject.getCanonicalName() + ":\n";
 
         for (Field field: typeObject.getDeclaredFields()) {
-            //TODO prüfen, ob Annotation eigene Renderer-Klasse enthält
-
-            String withValue = field.getAnnotation(RenderMe.class).with();
-            boolean foundClass = true;
-
-            try {
-                Class< ? > alternativeRendererClass = Class.forName(withValue);
-                if (withValue != "" && foundClass) {
-                    Constructor< ? > constructor = alternativeRendererClass.getConstructor();
-                }
-            } catch (ClassNotFoundException e) {
-                //no class found, go ahead with standard process
-            } catch (NoSuchMethodException e) {
-                //no class found, go ahead with standard process
-            }
-
-
-
             if (field.getAnnotation(RenderMe.class) != null) {
-
-                System.out.println(field.getAnnotation(RenderMe.class).with());
-                Class< ? > t = "ArrayRenderer".getClass();
-                System.out.println("class:" + t);
-
                 field.setAccessible(true);
-                result += field.getName() + " (Type " + field.getType() + "): " + field.get(obj).toString() + "\n";
-                // TODO: 04.04.17 Umwandlung von Typenbezeichnungen bspw. in "String" statt "class java.lang.String"
+
+                if(field.getType().isArray()){
+                    result += field.getName() + "(Type " + field.getType().getSimpleName() + "): [";
+                    for(int i = 0; i < Array.getLength(field.get(obj)); i++) {
+                        result += Array.get(field.get(obj),i) + ", ";
+                    }
+                    result += "]\n";
+
+                } else {
+                    result += field.getName() + "(Type " + field.getType().getSimpleName() + "): "  + field.get(obj)  +"\n";
+                }
+
             }
         }
-
-
-
 
         return result;
     }
 
-    public static void main(String[] args) throws IllegalAccessException, ClassNotFoundException {
-        /*App a = new App();
+    public static void main(String[] args) throws IllegalAccessException {
+        App a = new App();
         Renderer r = new Renderer(a);
-        System.out.println(r.render());*/
-
-        Class< ? > t = Class.forName("edu.hm.cs.apfel.reflection.ArrayRenderer");
-        System.out.println("class:" + t);
+        System.out.print(r.render());
     }
 
 }

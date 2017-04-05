@@ -6,8 +6,11 @@ package edu.hm.cs.apfel.reflection;
  */
 public class App 
 {
-    @RenderMe(with = "edu.hm.cs.apfel.reflection.App.ArrayRenderer")
-    private int privateIntField = 2;
+    @RenderMe(with = "blah")
+    private int test = 4;
+
+    @RenderMe
+    private int[] narray = new int[]{1,2,3};
 
     @RenderMe
     private boolean priveateBooleanField = false;
