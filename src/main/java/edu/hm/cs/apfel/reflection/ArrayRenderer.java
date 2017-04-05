@@ -6,6 +6,7 @@
 
 package edu.hm.cs.apfel.reflection;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
 /**
@@ -13,16 +14,10 @@ import java.lang.reflect.Field;
  * @author Florian Tobusch, tobusch@hm.edu
  * @version 01.04.2017
  */
-public class ArrayRenderer {
-    private final Object obj;
+public class ArrayRenderer implements Renderface {
 
-    /**
-     * Constructor.
-     * @param obj Object uses @RenderMe-Annotations at Arrays
-     */
-    public ArrayRenderer(Object obj) {
-        this.obj = obj;
-    }
+
+
 
     /**
      * for all arrays, which are annotated with @RenderMe.
@@ -31,20 +26,20 @@ public class ArrayRenderer {
      * @throws IllegalAccessException accesses field values
      * @return String contains all fields (public and private) with their values.
      */
-    public String render() throws IllegalAccessException {
-        String result = "";
-        Class< ? > typeObject = obj.getClass();
 
-        for (Field field: typeObject.getDeclaredFields()) {
-            if ((field.getAnnotation(RenderMe.class) != null) && (field.getAnnotation(RenderMe.class).with() == "ArrayRenderer")) {
-                field.setAccessible(true);
-                result += field.getName() + " (Type " + field.getType() + "): " + field.get(obj).toString() + "\n";
-                // TODO: 04.04.17 Umwandlung von Typenbezeichnungen bspw. in "String" statt "class java.lang.String"
-            }
+
+    @Override
+    public String render(Object o) {
+
+        String result ="(Type "+  o.getClass().getSimpleName() + ") [";
+
+        System.out.println(o.getClass().getSimpleName());
+
+        for(int i= 0; i < Array.getLength(o);i++) {
+            Object value = Array.get(o,i);
+            result += value + ", ";
         }
-
-
-
+        result += "]";
 
         return result;
     }

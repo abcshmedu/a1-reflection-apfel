@@ -32,26 +32,31 @@ public class Renderer {
      *
      * @return String contains all fields (public and private) with their values.
      */
-    public String render() throws IllegalAccessException {
+
+    public String render() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         String result = "";
         Class<?> typeObject = obj.getClass();
 
         result += "Instance of " + typeObject.getCanonicalName() + ":\n";
 
         for (Field field: typeObject.getDeclaredFields()) {
+
             if (field.getAnnotation(RenderMe.class) != null) {
                 field.setAccessible(true);
+                String renderPath = field.getAnnotation(RenderMe.class).with();
+                result += field.getName();
 
-                if(field.getType().isArray()){
-                    result += field.getName() + "(Type " + field.getType().getSimpleName() + "): [";
-                    for(int i = 0; i < Array.getLength(field.get(obj)); i++) {
-                        result += Array.get(field.get(obj),i) + ", ";
-                    }
-                    result += "]\n";
+                if(!renderPath.equals("")){
+                    Class<?>typ = Class.forName(renderPath);
+                    Renderface renderer = (Renderface) typ.newInstance();
 
-                } else {
-                    result += field.getName() + "(Type " + field.getType().getSimpleName() + "): "  + field.get(obj)  +"\n";
+                    result += renderer.render(field.get(obj));
+
+                } else { // Default Rendering:
+                    result += "(Type " + field.getType().getSimpleName() + "): "  + field.get(obj);
                 }
+
+                result += "\n";
 
             }
         }
@@ -59,7 +64,7 @@ public class Renderer {
         return result;
     }
 
-    public static void main(String[] args) throws IllegalAccessException {
+    public static void main(String[] args) throws IllegalAccessException, InstantiationException, ClassNotFoundException {
         App a = new App();
         Renderer r = new Renderer(a);
         System.out.print(r.render());

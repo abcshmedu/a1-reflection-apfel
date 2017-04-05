@@ -6,10 +6,7 @@ package edu.hm.cs.apfel.reflection;
  */
 public class App 
 {
-    @RenderMe(with = "blah")
-    private int test = 4;
-
-    @RenderMe
+    @RenderMe(with = "edu.hm.cs.apfel.reflection.ArrayRenderer")
     private int[] narray = new int[]{1,2,3};
 
     @RenderMe
