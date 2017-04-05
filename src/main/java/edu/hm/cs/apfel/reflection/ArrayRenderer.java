@@ -7,7 +7,6 @@
 package edu.hm.cs.apfel.reflection;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Field;
 
 /**
  * @author Maximilian Lipp, lipp@hm.edu
@@ -17,19 +16,19 @@ import java.lang.reflect.Field;
 public class ArrayRenderer implements Renderface {
 
     /**
-     * for all arrays, which are annotated with @RenderMe.
-     * name (Typ) Wert\n
-     * @return String contains all fields (public and private) with their values.
+     * Method renders one object.
+     *
+     * @param o an object for which the method supports the render-functionality
+     * @return String representation of the object with type and values
      */
-
     public String render(Object o) {
 
-        String result ="(Type "+  o.getClass().getSimpleName() + ") [";
+        String result = "(Type " +  o.getClass().getSimpleName() + ") [";
 
         System.out.println(o.getClass().getSimpleName());
 
-        for(int i= 0; i < Array.getLength(o);i++) {
-            Object value = Array.get(o,i);
+        for (int i = 0; i < Array.getLength(o); i++) {
+            Object value = Array.get(o, i);
             result += value + ", ";
         }
         result += "]";

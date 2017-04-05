@@ -4,8 +4,11 @@ package edu.hm.cs.apfel.reflection;
  * Hello world!
  *
  */
-public class App 
+public class App
 {
+    @RenderMe
+    private App x = new App();
+
     @RenderMe(with = "edu.hm.cs.apfel.reflection.ArrayRenderer")
     private int[] narray = new int[]{1,2,3};
 
