@@ -81,7 +81,7 @@ public class Renderer {
 
                             result += renderer.render(method.invoke(typeObject.newInstance()));
                         } else {                                                // Kein ArrayRenderer angeben -> Exeption
-                            throw new Exception("with is empty! @RenderMe annotated Functions with Arrays as a ReturnType have to have a valid Annotation argument (with)!");
+                            throw new Exception("Argument with is empty! @RenderMe annotated Functions with Arrays as a ReturnType have to have a valid Annotation argument (with)!");
                         }
                     } else {                                                    // Return Type  ist kein Array -> benutze DefaultRendering
                         result += "(Type " + method.getReturnType().getSimpleName() + ")" + method.invoke(typeObject.newInstance());
