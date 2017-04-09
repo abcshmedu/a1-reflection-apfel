@@ -24,4 +24,16 @@ public class RendererTestForException {
         r.render();
     }
 
+    @Test(expected=Exception.class)
+    public void testExceptionEmptyWithAttribute() throws Exception {
+        Renderer r = new Renderer(new Object() {@RenderMe private int[] foo() {return new int[]{1,2,3};} });
+        r.render();
+    }
+
+    @Test(expected=Exception.class)
+    public void testExceptionMethodWithParameters() throws Exception {
+        Renderer r = new Renderer(new Object() {@RenderMe private int foo(int param) {return 1;} });
+        r.render();
+    }
+
 }

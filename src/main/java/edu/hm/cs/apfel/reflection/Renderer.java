@@ -30,12 +30,8 @@ public class Renderer {
      * For all methods with return value and without parameter.
      *
      * @return String contains all fields and methods (public and private) with their values.
-     * @throws ClassNotFoundException renderer class of user in with-attribute does not exit
-     * @throws IllegalAccessException IllegalAccessException
-     * @throws InstantiationException InstantiationException
-     * @throws InvocationTargetException InvocationTargetException
+     * @throws Exception diverse exceptions
      */
-
     public String render() throws Exception {
         String result = "";
         Class< ? > typeObject = obj.getClass();
@@ -86,7 +82,7 @@ public class Renderer {
                             //result += "(Type "+method.getReturnType().getSimpleName() + ")"+ method.invoke(typeObject.newInstance());
                         }
                     } else {
-                        result += "(Type " + method.getReturnType().getSimpleName() + ")" + method.invoke(typeObject.newInstance());
+                        result += "(Type " + method.getReturnType().getSimpleName() + "): " + method.invoke(typeObject.newInstance());
                     }
                 } else {
                     throw new Exception("with @RenderMe Annotations, Functions are not allowed to have Arguments - and can't be rendered!");

@@ -29,7 +29,9 @@ public class RendererTest {
                     { "ObjectWithPrivateStringWithoutAnnotation", new Renderer( new Object() {private String publicStringField = "this is a test-String";} ), "Instance of null:\n" },
                     { "ObjectWithPrivateBoolean", new Renderer( new Object() {@RenderMe private boolean privateBooleanField = false;} ), "Instance of null:\nprivateBooleanField(Type boolean): false\n" },
                     { "ObjectWithArrayRenderer", new Renderer( new Object() {@RenderMe(with = "edu.hm.cs.apfel.reflection.ArrayRenderer") private int[] privateIntArray = new int[]{1,2,3};} ), "Instance of null:\nprivateIntArray(Type int[]) [1, 2, 3, ]\n" },
-                    { "ObjectWithDate", new Renderer( new Object() {@RenderMe private Date privateDateField = new Date(123456789);} ), "Instance of null:\nprivateDateField(Type Date): Fri Jan 02 11:17:36 CET 1970\n" }
+                    { "ObjectWithDate", new Renderer( new Object() {@RenderMe private Date privateDateField = new Date(123456789);} ), "Instance of null:\nprivateDateField(Type Date): Fri Jan 02 11:17:36 CET 1970\n" },
+                    { "ObjectWithMethodReturnTypeInt", new Renderer( new Object() {@RenderMe private int foo() {return -10;}} ), "Instance of null:\nfoo (Type int): -10\n" },
+                    { "ObjectWithMethodReturnTypeArray", new Renderer( new Object() {@RenderMe(with = "edu.hm.cs.apfel.reflection.ArrayRenderer") private int[] arrayFoo() {return new int[] {10,15,20};}} ), "Instance of null:\narrayFoo (Type int[]) [10, 15, 20, ]\n" }
             });
         }
 
