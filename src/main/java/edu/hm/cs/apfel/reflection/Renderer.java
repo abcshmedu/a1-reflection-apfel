@@ -62,29 +62,27 @@ public class Renderer {
             }
         }
         for (Method method: typeObject.getDeclaredMethods()) {
-            if (method.getAnnotation(RenderMe.class) != null) {
+            if (method.getAnnotation(RenderMe.class) != null) {                 // Mehtode Annotiert mit RenderMe?
                 method.setAccessible(true);
 
-                if (method.getParameterTypes().length == 0) {
+                if (method.getParameterTypes().length == 0) {                   // Methode hat keine Parameter?
                     result += method.getName() + " ";
 
-                    if (method.getReturnType().isArray()) {
+                    if (method.getReturnType().isArray()) {                     // Methode gibt Array zurück?
                         String renderPath = method.getAnnotation(RenderMe.class).with();
 
-                        if (!renderPath.equals("")) {
+                        if (!renderPath.equals("")) {                           // für diesen Array ist ein ArrayRenderer angegeben ?
                             Class< ? > typ = Class.forName(renderPath);
                             Renderface renderer = (Renderface) typ.newInstance();
 
                             result += renderer.render(method.invoke(typeObject.newInstance()));
-                        } else {
-                            throw new Exception("with is empty! @RenderMe annotated Functions with Arrays as a ReturnType have to have a valid Annotation argument (with)!");
-                            // Default Proceedure
-                            //result += "(Type "+method.getReturnType().getSimpleName() + ")"+ method.invoke(typeObject.newInstance());
+                        } else {                                                // Kein ArrayRenderer angeben -> Exeption
+                            throw new Exception("Argument with is empty! @RenderMe annotated Functions with Arrays as a ReturnType have to have a valid Annotation argument (with)!");
                         }
-                    } else {
+                    } else {                                                    // Return Type  ist kein Array -> benutze DefaultRendering
                         result += "(Type " + method.getReturnType().getSimpleName() + "): " + method.invoke(typeObject.newInstance());
                     }
-                } else {
+                } else {                                                        // Methode hat Parameter -> Exeption
                     throw new Exception("with @RenderMe Annotations, Functions are not allowed to have Arguments - and can't be rendered!");
                 }
                 result += "\n";
